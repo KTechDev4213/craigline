@@ -5,6 +5,8 @@ app.Configure(config =>
 {
     config.SetApplicationName("craigline");
     config.AddCommand<SearchCommand>("search")
-        .WithDescription("Search Craigline.");
+        .WithDescription("Search Craigslist");
+    config.AddCommand<PostCommand>("post")
+        .WithDescription("Post to Craigslist");
 });
 app.Run(args);

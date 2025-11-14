@@ -8,18 +8,15 @@ using System.Threading.Tasks;
 
 namespace craigline
 {
-    internal class SearchCommand:Command<SearchCommand.Settings>
+    internal class PostCommand:Command<PostCommand.Settings>
     {
-        public class Settings : CommandSettings
+        public class Settings:CommandSettings
         {
-            [CommandArgument(0, "[term]")]
-            public string Term { get; set; }
-            [CommandArgument(1, "[sortby]")]
-            public string SortBy { get; set; }
+
         }
         public override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
         {
-            AnsiConsole.MarkupLine($"Hello, [blue]{settings.Term}[/]");
+            AnsiConsole.MarkupLine($"Posting not implemented yet");
             return 0;
         }
     }

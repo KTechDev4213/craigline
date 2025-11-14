@@ -8,18 +8,16 @@ using System.Threading.Tasks;
 
 namespace craigline
 {
-    internal class SearchCommand:Command<SearchCommand.Settings>
+    internal class ViewCommand : Command<ViewCommand.Settings>
     {
         public class Settings : CommandSettings
         {
-            [CommandArgument(0, "[term]")]
-            public string Term { get; set; }
-            [CommandArgument(1, "[sortby]")]
-            public string SortBy { get; set; }
+            [CommandArgument(0, "[id]")]
+            public string Id { get; set; }
         }
         public override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
         {
-            AnsiConsole.MarkupLine($"Hello, [blue]{settings.Term}[/]");
+            AnsiConsole.MarkupLine($"Viewing post with ID: [green]{settings.Id}[/]");
             return 0;
         }
     }
