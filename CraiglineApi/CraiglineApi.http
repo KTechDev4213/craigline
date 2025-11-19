@@ -1,0 +1,6 @@
+@CraiglineApi_HostAddress = http://localhost:5096
+
+GET {{CraiglineApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -8,16 +8,25 @@ using System.Threading.Tasks;
 
 namespace craigline
 {
-    internal class PostCommand:Command<PostCommand.Settings>
+    internal class PostCommand:AsyncCommand<PostCommand.Settings>
     {
+        CraigClient client = new CraigClient();
         public class Settings:CommandSettings
         {
-
+            [CommandArgument(0, "<title>")]
+            public string Title { get; init; }
+            [CommandArgument(1, "<description>")]
+            public string Description { get; init; }
+            [CommandArgument(2, "<price>")]
+            public decimal Price { get; init; }
         }
-        public override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
+        public PostCommand()
         {
-            AnsiConsole.MarkupLine($"Posting not implemented yet");
-            return 0;
+            client = new CraigClient();
+        }
+        public override Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
+        {
+            return client.Post(new Post(1, 3,settings.Title, settings.Description, settings.Price));
         }
     }
 }
