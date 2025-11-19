@@ -26,7 +26,13 @@ namespace craigline
         }
         public override Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
         {
-            return client.Post(new Post(1, 3,settings.Title, settings.Description, settings.Price));
+            if(client.CheckAuthStatus())
+                return client.Post(new Post(1, 3,settings.Title, settings.Description, settings.Price));
+            else
+            {
+                AnsiConsole.MarkupLine("[red]You must be logged in to post an item.[/]");
+                return Task.FromResult(-1);
+            }
         }
     }
 }

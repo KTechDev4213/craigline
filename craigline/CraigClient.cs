@@ -9,6 +9,7 @@ namespace craigline
 {
     internal class CraigClient
     {
+        FileStream settingsFile = File.OpenWrite(Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "appsettings.json"));
         HttpClient client = new HttpClient()
         {
             BaseAddress = new Uri("https://craigline/api/")
