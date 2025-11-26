@@ -30,8 +30,8 @@ namespace craigline
                 return client.Post(new Post(1, 3,settings.Title, settings.Description, settings.Price));
             else
             {
-                AnsiConsole.MarkupLine("[red]You must be logged in to post an item.[/]");
-                return Task.FromResult(-1);
+                Utils.NotLoggedInMessage();
+                return Task.FromResult(1);
             }
         }
     }

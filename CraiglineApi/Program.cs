@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,12 +6,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddAuthentication(builder =>
 {
-    builder.DefaultAuthenticateScheme = "Bearer";
-    });
+    builder.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    builder.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}
+).AddJwtBearer(options =>
+{
+    options.Audience = "craigline_api";
+    options.Authority = "https://dev-8att7jypkdqyxipd.us.auth0.com/";
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

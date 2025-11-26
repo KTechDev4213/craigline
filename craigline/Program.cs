@@ -8,5 +8,7 @@ using Spectre.Console.Cli;
             .WithDescription("Search Craigslist");
         config.AddCommand<PostCommand>("post")
             .WithDescription("Post to Craigslist");
+        config.AddCommand<AuthCommand>("auth")
+            .WithDescription("Sign in");
     });
 app.Run(args);
