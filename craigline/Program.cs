@@ -1,8 +1,14 @@
 ﻿using craigline;
 using Spectre.Console.Cli;
-    var app = new CommandApp();
-    app.Configure(config =>
-    {
+using Microsoft.Extensions.DependencyInjection;
+
+var registrations = new ServiceCollection();
+registrations.AddSingleton<PersistentData>();
+registrations.AddSingleton<CraigClient>();
+var registrar = new ServiceCollectionRegistrar(registrations);
+var app = new CommandApp(registrar);
+app.Configure(config =>
+{
         config.SetApplicationName("craigline");
         config.AddCommand<SearchCommand>("search")
             .WithDescription("Search Craigslist");

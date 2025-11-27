@@ -8,6 +8,15 @@ namespace craigline
 {
     internal class PersistentData
     {
+        private string path;
         public string AuthToken { get; set; }
+        public PersistentData()
+        {
+            path = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "craigline", "config.dat");
+        }
+        public void Save()
+        {
+
+        }
     }
 }

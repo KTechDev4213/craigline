@@ -16,13 +16,25 @@ namespace craigline
         };
         public bool CheckAuthStatus()
         {
+            //check if there's a stored auth token
+            //if not:
             return false;
+        }
+        public string GetAccessToken()
+        {
+            //read access token from persistent storage
+            return "";
         }
         public async Task<int> Post(Post product)
         {
             Console.WriteLine("Preparing to post product to Craigslist...");
             var response = await client.PostAsync("/product", JsonContent.Create(product));
-            if (!response.IsSuccessStatusCode)
+            if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                //get new access token from refresh token
+                //if that fails, return Utils.NotLoggedIn ...
+            }
+            else if (!response.IsSuccessStatusCode)
             {
                 Console.WriteLine($"Failed to post product: {response.StatusCode}");
             }

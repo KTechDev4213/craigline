@@ -24,15 +24,15 @@ namespace craigline
         {
             client = new CraigClient();
         }
-        public override Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
+        public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
         {
-            if(client.CheckAuthStatus())
-                return client.Post(new Post(1, 3,settings.Title, settings.Description, settings.Price));
-            else
+            if (!client.CheckAuthStatus())
             {
                 Utils.NotLoggedInMessage();
-                return Task.FromResult(1);
+                return 1;
             }
+            var response = await client.Post(new Post(1, 3, settings.Title, settings.Description, settings.Price));
+            return response;
         }
     }
 }

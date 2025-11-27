@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using CraiglineApi;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,6 +15,7 @@ builder.Services.AddAuthentication(builder =>
     options.Audience = "craigline_api";
     options.Authority = "https://dev-8att7jypkdqyxipd.us.auth0.com/";
 });
+
 
 var app = builder.Build();
 
@@ -49,15 +51,18 @@ app.MapGet("search", (string? query) =>
 })
     .WithOpenApi();
 
-app.MapPost("product", (Post product) =>
+app.MapPost("product", (Post product, AppDbContext dbContext) =>
 {
-    if(product == null)
+    if (product == null)
     {
         return Results.BadRequest("Product is required.");
     }
-    return Results.Ok(new Post(23, 69, "Bigg ass dildo", "A really big dildo", 3000));
+    //product.UserId
+    dbContext.Posts.Add(product);
+    return Results.Ok(new Post("23", "69", "Bigg ass dildo", "A really big dildo", 3000));
 })
-    .WithOpenApi();
+    .WithOpenApi()
+    .RequireAuthorization();
 
 app.MapGet("product", (int? id) =>
 {
@@ -65,7 +70,7 @@ app.MapGet("product", (int? id) =>
     {
         return Results.BadRequest("Product ID is required");
     }
-    return Results.Ok(new Post(69, 1, "Fuel - Eminem", "He didn't just spell rapper without a p did he.", 6969));
+    return Results.Ok(new Post("69", "1", "Fuel - Eminem", "He didn't just spell rapper without a p did he.", 6969));
 })
     .WithOpenApi();
 
@@ -75,7 +80,7 @@ app.MapGet("user", (int? id) =>
     {
         return Results.BadRequest("Bro what's ur id");
     }
-    return Results.Ok(new User(67, "Loser", "fu@ass.hole"));
+    return Results.Ok(new User("67", "Loser", "fu@ass.hole"));
 })
     .WithOpenApi();
 
@@ -93,5 +98,5 @@ app.MapPost("user", (User? user) =>
 app.Run();
 
 
-public record Post(int Id, int UserId, string Name, string Description, decimal Price);
-public record User(int Id, string UserName, string Email);
+public record Post(string Id, string UserId, string Name, string Description, decimal Price);
+public record User(string Id, string UserName, string Email);
