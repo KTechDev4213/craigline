@@ -34,19 +34,16 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-app.MapGet("search", (string? query) =>
+app.MapGet("search", (string? query, AppDbContext dbContext) =>
 {
     if (string.IsNullOrWhiteSpace(query))
     {
         return Results.BadRequest("Query parameter is required.");
     }
+    //Very besic search function. Need to add sorting and only return a specified number of results.
+    var results = dbContext.Posts.Where(p => p.Name.Contains(query) || p.Description.Contains(query))
+        .ToList();
 
-    var results = new[]
-    {
-        $"Result 1 for '{query}'",
-        $"Result 2 for '{query}'",
-        $"Result 3 for '{query}'"
-    };
     return Results.Ok(results);
 })
     .WithOpenApi();
