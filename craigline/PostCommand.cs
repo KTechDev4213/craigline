@@ -31,7 +31,7 @@ namespace craigline
                 Utils.NotLoggedInMessage();
                 return 1;
             }
-            var response = await client.Post(new Post(1, 3, settings.Title, settings.Description, settings.Price));
+            var response = await client.Post(new Post("1", "3", settings.Title, settings.Description, settings.Price));
             return response;
         }
     }

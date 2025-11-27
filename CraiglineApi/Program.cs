@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using CraiglineApi;
+using FileContextCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,6 +18,14 @@ builder.Services.AddAuthentication(builder =>
 {
     options.Audience = "craigline_api";
     options.Authority = "https://dev-8att7jypkdqyxipd.us.auth0.com/";
+});
+builder.Services.AddAuthorization();
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    if (builder.Environment.IsDevelopment())
+        options.UseFileContextDatabase();
+    else if (builder.Environment.IsProduction())
+        options.UseSqlite("");
 });
 builder.Services.AddScoped<UserService>();
 
