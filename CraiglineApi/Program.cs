@@ -15,7 +15,7 @@ builder.Services.AddAuthentication(builder =>
     options.Audience = "craigline_api";
     options.Authority = "https://dev-8att7jypkdqyxipd.us.auth0.com/";
 });
-
+builder.Services.AddScoped<UserService>();
 
 var app = builder.Build();
 
@@ -51,38 +51,38 @@ app.MapGet("search", (string? query) =>
 })
     .WithOpenApi();
 
-app.MapPost("product", (Post product, AppDbContext dbContext) =>
+app.MapPost("product", (Post product, AppDbContext dbContext, UserService userService) =>
 {
     if (product == null)
     {
         return Results.BadRequest("Product is required.");
     }
-    //product.UserId
+    if (product.UserId != userService.GetUserId())
+    {
+        return Results.BadRequest("Invalid user ID.");
+    }
     dbContext.Posts.Add(product);
-    return Results.Ok(new Post("23", "69", "Bigg ass dildo", "A really big dildo", 3000));
+    return Results.Ok();
 })
     .WithOpenApi()
     .RequireAuthorization();
 
-app.MapGet("product", (int? id) =>
+app.MapGet("product", (string? id, AppDbContext dbContext) =>
 {
     if(id == null)
     {
         return Results.BadRequest("Product ID is required");
     }
-    return Results.Ok(new Post("69", "1", "Fuel - Eminem", "He didn't just spell rapper without a p did he.", 6969));
+    return Results.Ok(dbContext.Posts.Where(p => p.Id == id).FirstOrDefault());
 })
     .WithOpenApi();
 
-app.MapGet("user", (int? id) =>
+app.MapGet("user", (AppDbContext dbContext, UserService userService) =>
 {
-    if (id == null)
-    {
-        return Results.BadRequest("Bro what's ur id");
-    }
-    return Results.Ok(new User("67", "Loser", "fu@ass.hole"));
+    return Results.Ok(dbContext.Users.Where(u=> u.Id == userService.GetUserId()));
 })
-    .WithOpenApi();
+    .WithOpenApi()
+    .RequireAuthorization();
 
 app.MapPost("user", (User? user) =>
 {

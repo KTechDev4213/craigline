@@ -48,9 +48,9 @@ namespace craigline
             {
 
             }
-            return new Post[] { new Post(42, 69, "Jon Snow", "THE GOAT", 67)};
+            return new Post[] { new Post("42", "69", "Jon Snow", "THE GOAT", 67)};
         }
     }
 }
-record Post(int Id, int UserId, string Name, string Description, decimal Price);
-record User(int Id, string UserName, string Email);
+record Post(string Id, string UserId, string Name, string Description, decimal Price);
+record User(string Id, string UserName, string Email);
