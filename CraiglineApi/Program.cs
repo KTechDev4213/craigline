@@ -84,12 +84,13 @@ app.MapGet("user", (AppDbContext dbContext, UserService userService) =>
     .WithOpenApi()
     .RequireAuthorization();
 
-app.MapPost("user", (User? user) =>
+app.MapPost("user", (User? user, AppDbContext dbContext, UserService userService) =>
 {
     if (user == null)
     {
         return Results.BadRequest("Invalid loser data");
     }
+    
     return Results.Ok();
 })
     .WithOpenApi();
