@@ -20,13 +20,21 @@ builder.Services.AddAuthentication(builder =>
     options.Authority = "https://dev-8att7jypkdqyxipd.us.auth0.com/";
 });
 builder.Services.AddAuthorization();
-builder.Services.AddDbContext<AppDbContext>(options =>
+if(builder.Environment.IsDevelopment())
 {
-    if (builder.Environment.IsDevelopment())
+    builder.Services.AddDbContext<AppDbContext>(options =>
+    {
         options.UseFileContextDatabase();
-    else if (builder.Environment.IsProduction())
-        options.UseSqlite("");
-});
+    });
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+    {
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        options.UseSqlite(connectionString);
+    });
+}
 builder.Services.AddScoped<UserService>();
 
 var app = builder.Build();

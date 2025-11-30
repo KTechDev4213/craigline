@@ -10,7 +10,7 @@ namespace craigline
 {
     internal class PostCommand:AsyncCommand<PostCommand.Settings>
     {
-        CraigClient client = new CraigClient();
+        CraigClient client;
         public class Settings:CommandSettings
         {
             [CommandArgument(0, "<title>")]
@@ -20,9 +20,9 @@ namespace craigline
             [CommandArgument(2, "<price>")]
             public decimal Price { get; init; }
         }
-        public PostCommand()
+        public PostCommand(CraigClient client)
         {
-            client = new CraigClient();
+            this.client = client;
         }
         public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
         {

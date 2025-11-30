@@ -9,10 +9,14 @@ namespace craigline
 {
     public class MessageSellerCommand:AsyncCommand<MessageSellerCommand.Settings>
     {
-        CraigClient client = new CraigClient();
+        CraigClient client;
         public class Settings:CommandSettings
         {
             
+        }
+        public MessageSellerCommand(CraigClient client)
+        {
+            this.client = client;
         }
         public override Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
         {

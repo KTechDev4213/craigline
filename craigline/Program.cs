@@ -3,7 +3,7 @@ using Spectre.Console.Cli;
 using Microsoft.Extensions.DependencyInjection;
 
 var registrations = new ServiceCollection();
-registrations.AddSingleton<PersistentData>();
+registrations.AddSingleton<ITokenStore, TokenStore>();
 registrations.AddSingleton<CraigClient>();
 var registrar = new ServiceCollectionRegistrar(registrations);
 var app = new CommandApp(registrar);

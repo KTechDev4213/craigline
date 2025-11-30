@@ -7,23 +7,27 @@ using System.Threading.Tasks;
 
 namespace craigline
 {
-    internal class CraigClient
+    public class CraigClient
     {
-        FileStream settingsFile = File.OpenWrite(Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "appsettings.json"));
+        private bool authenticated;
+        public CraigClient(ITokenStore tokenStore) 
+        { 
+            var token = tokenStore.GetToken();
+            if(token is null)
+            {
+                authenticated = false;
+                return;
+            }
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.access_token}");
+            authenticated = true;
+        }
         HttpClient client = new HttpClient()
         {
             BaseAddress = new Uri("https://craigline/api/")
         };
         public bool CheckAuthStatus()
         {
-            //check if there's a stored auth token
-            //if not:
-            return false;
-        }
-        public string GetAccessToken()
-        {
-            //read access token from persistent storage
-            return "";
+            return authenticated;
         }
         public async Task<int> Post(Post product)
         {
@@ -52,5 +56,5 @@ namespace craigline
         }
     }
 }
-record Post(string Id, string UserId, string Name, string Description, decimal Price);
+public record Post(string Id, string UserId, string Name, string Description, decimal Price);
 record User(string Id, string UserName, string Email);
